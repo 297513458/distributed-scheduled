@@ -2,11 +2,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.htxx.scheduled</groupId>
-	<artifactId>zookeeper-scheduled</artifactId>
+	<artifactId>distributed-scheduled</artifactId>
 	<packaging>pom</packaging>
-	<name>zookeeper-scheduled</name>
+	<name>distributed-scheduled</name>
 	<version>0.0.1-SNAPSHOT</version>
-	<description>任务调度</description>
+	<description>分布式任务调度</description>
 	<modules>
 		<module>scheduled_web</module>
 		<module>scheduled-context</module>
