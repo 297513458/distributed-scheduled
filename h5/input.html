@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>任务监控平台</title>
+<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+<!-- jQuery (necessary JavaScript plugins) -->
+<script src="js/jquery.min.js"></script>
+<!-- Custom Theme files -->
+<link href="css/dashboard.css" rel="stylesheet">
+<link href="css/style.css" rel='stylesheet' type='text/css' />
+<!--//Custom Theme files -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } 
+</script>
+<script src="js/template.js"></script>
+</head>
+<body>
+<script id="registrar" type="text/html">
+	 <h3>注册的任务列表<li></li></h3>
+    {{each data as value i}}
+       <div class="team-grids" id="{{value.id}}"> 
+		 <ul onclick="fixInfo('{{value.beanId}}','{{value.clazz}}','{{value.method}}','{{value.cron}}','{{value.message}}')">
+		  <li> {{value.status}}<li> <li>{{i+1}}：</li><li>{{value.clazz}}</li> <li>{{value.method}}</li><li>{{value.cron}}</li> <li> {{value.message}}</li></ul></div>
+    {{/each}}
+		<div class="clearfix"></div>
+</script>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">	 
+		<div class="clearfix"></div>
+ 		 <div class="team-work" >
+ 	 <h3>添加任务</h3>
+    <div class="team-grids" id="{{data.id}}">
+		<ul> 	<li>beanId：</li><li><input name="beanId"   id="beanId" value="" /></li>  	<li><input type="button" onclick="listRegeister()" value="选择注册的任务" /></li>  </ul>
+				<ul> <li>类名：</li><li><input name="clazz"   id="clazz" value="" /></li></ul>
+				<ul> <li>方法名：</li><li><input id="method" name="method" value="" /></li> </ul>
+				<ul> <li>执行规则：</li><li><input id="cron" name="cron" value="" /></li> </ul>
+				<ul> <li>状态：</li><li><input name="status" id="status" value="" /></li> </ul>
+ 				<ul> <li>描述：</li><li><input name="message" id="message" value="" /></li> </ul>
+					<ul> <li><input type="button" onclick="save()" value="提交" /></li> </ul>
+ 		</div>
+		<div class="clearfix"></div>  
+	 </div>
+</div>
+<div class="clearfix"></div>
+ <div class="team-work" id="content">
+	 </div>
+<script>
+ function save(){
+		if($("#cron").val().length<=0||$("#cron").val().indexOf("*")<0)
+		{alert("执行规则必须填写");
+		return false;}
+		var formdata={'clazz':$("#clazz").val(),'method':$("#method").val(),'cron':$("#cron").val(),'status':$("#status").val(),'message':$("#message").val()};
+		console.log(JSON.stringify({"operate":"SAVE","data":formdata}));
+		 $.ajax({ 
+            url:"http://127.0.0.1/task/index/"+$("#clazz").val()+"/"+$("#method").val(), 
+            dataType:"json",      
+			type:"post",
+			headers: {'token':localStorage.token},
+            contentType:"application/json;charset=UTF-8",               
+			data:JSON.stringify({"operate":"SAVE","data":formdata}), 
+			success: function(result) {
+				if(result.code==200&&result.data==true)
+					alert("操作成功");
+				else
+					alert("操作失败:"+result.message);if(result.token!=null)
+				localStorage.token=result.token;
+			}
+         }); 
+		 } function fixInfo(beanId,clazz,  method,  cron,message){
+			$("#beanId").val(beanId);
+			$("#clazz").val(clazz);
+		$("#method").val(method);
+		$("#cron").val(cron);
+			$("#message").val(message);
+		 }
+  function listRegeister(){
+ 		 $.ajax({ 
+            url:"http://127.0.0.1/task/zk/registering", 
+            dataType:"json",      
+			type:"post",
+			headers: {'token':localStorage.token},
+            contentType:"application/json;charset=UTF-8",               
+			data:{}, 
+			success: function(result) {
+				if(result.code==200){
+				if(result.token!=null)
+				localStorage.token=result.token;
+					//alert(result.data);
+					var html = template('registrar',result);
+					$('#content').html(html);
+			}else
+					alert("操作失败:"+result.message);
+			}
+         }); 
+		 }
+</script>
+<!---->
+</body>
+</html>

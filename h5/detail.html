@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>任务监控平台</title>
+<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+<!-- jQuery (necessary JavaScript plugins) -->
+<script src="js/jquery.min.js"></script>
+<!-- Custom Theme files -->
+<link href="css/dashboard.css" rel="stylesheet">
+<link href="css/style.css" rel='stylesheet' type='text/css' />
+<!--//Custom Theme files -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } 
+</script>
+<script src="js/template.js"></script>
+</head>
+<body>
+<!-- header -->
+ <script id="test" type="text/html">
+	 <h3>任务详情</h3>
+    <div class="team-grids" id="{{data.id}}">
+				<ul> <li>类名：</li><li>{{data.clazz}}</li> </ul>
+				<ul> <li>方法名：</li><li>{{data.method}}</li> </ul>
+				<ul> <li>执行规则：</li><li>{{data.cron}}</li> </ul>
+				<ul> <li>状态：</li><li>{{data.status}}</li> </ul>
+				<ul> <li>是否同步：</li><li>{{if data.syncStatus}}同步{{else}}没有同步{{/if}}  {{data.syncStatus}}</li> </ul>
+				<ul> <li>同步时间：</li><li>{{data.syncTime}}</li> </ul>
+					<ul> <li>描述:</li><li>{{data.message}}</li> </ul>
+		</div>
+		<div class="clearfix"></div>
+</script>		 
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">	 
+		<div class="clearfix"></div>
+ 		 <div class="team-work" id="content">
+		  
+	 </div>
+</div>
+<div class="clearfix"></div>
+<!---->
+<script>
+  //获取url中的参数
+	function getUrlParam(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+		var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+		if (r != null) return unescape(r[2]); return null; //返回参数值
+	}
+	var clazz = getUrlParam('clazz');
+	var method = getUrlParam('method');
+   $.ajax({ 
+            url:"http://127.0.0.1/task/index/"+clazz+"/"+method, 
+            dataType:"json",      
+			type:"get",
+			headers: {'token':localStorage.token},
+            contentType:"application/json;charset=UTF-8",               
+            success: function(result) {
+			if(result.token!=null)
+				localStorage.token=result.token;
+			var html = template('test', result);
+			$('#content').html(html);
+			}
+         }); 
+</script>
+<!---->
+</body>
+</html>

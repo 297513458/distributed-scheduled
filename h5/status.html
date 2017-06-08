@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>任务监控平台</title>
+<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+<!-- jQuery (necessary JavaScript plugins) -->
+<script src="js/jquery.min.js"></script>
+<!-- Custom Theme files -->
+<link href="css/dashboard.css" rel="stylesheet">
+<link href="css/style.css" rel='stylesheet' type='text/css' />
+<!--//Custom Theme files -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } 
+</script>
+<script src="js/template.js"></script>
+</head>
+<body>
+<!-- header -->
+<div class="col-md-2 sidebar">
+<script id="deploy" type="text/html">
+	 <h3>任务列表<li></h3>
+    {{each data as value i}}
+       <div class="team-grids" id="{{value.id}}"> 
+		 <ul>
+		  <li>{{i+1}}：</li><li>{{value.clazz}}</li> <li>{{value.method}}</li><li>{{value.cron}}</li><li> {{value.status}}<li> 
+				<li onclick="detail('{{value.clazz}}','{{value.method}}')">明细</li></ul></div>
+    {{/each}}
+		<div class="clearfix"></div>
+</script>
+<script id="detail" type="text/html">
+	 <h3>任务详情</h3>
+         <div class="team-grids" id="{{data.id}}">
+		 <ul> <li>类名:{{data.clazz}}</li> <li>方法:{{data.method}} </li><li> 执行规则:{{data.cron}} </li><li> 执行状态:{{data.status}} </li>
+		</div>
+ 		<div class="clearfix"></div>
+</script>		 <div class="sidebar_top">
+			 <h5><a href="index.html">任务监控平台</a></h5> 			 
+		 </div>
+		<div class="top-navigation">
+				<div class="t-menu">MENU</div>
+
+				<div class="t-img">
+					<img src="images/lines.png" alt="" />
+				</div>
+				<div class="clearfix"> </div>
+		</div>
+		<div class="drop-navigation">
+			 <div class="top-menu">
+				 
+				 <ul>
+					 <li><a href="index.html">全部任务</a></li>
+					 <li><a href="running.html">运行中任务</a></li>
+					 <li><a href="pt.html">平台管理</a></li>
+					 <li class="active"><a href="status.html">运行状态</a></li>
+					 <li><a href="logs.html">日志</a></li>
+					 <li><a href="contact.html">用户管理</a></li>
+				 </ul>			 		 
+			 </div>
+			<!-- script-for-menu -->
+							<script>
+								$( ".top-navigation" ).click(function() {
+								$( ".drop-navigation" ).slideToggle( 300, function() {
+								// Animation complete.
+								});
+								});
+							</script>
+			
+		</div>
+</div>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">	 
+
+		<div class="clearfix"></div>
+	 <!----->
+		 <div class="team-work" id="content">
+		
+
+	 </div>
+		 <div class="team-work" id="detailContent"></div>
+</div>
+<div class="clearfix"></div>
+<!---->
+<script>
+//console.log("ppp");
+ 		 $.ajax({ 
+            url:"http://127.0.0.1/task/zk/deploy", 
+            dataType:"json",      
+			type:"post",
+				headers: {'token':localStorage.token},
+            contentType:"application/json;charset=UTF-8",               
+			data:{}, 
+			success: function(result) {
+				if(result.code==200){
+			if(result.token!=null)
+				localStorage.token=result.token;
+					var html = template('deploy',result);
+					$('#content').html(html);
+			}else
+					alert("操作失败:"+result.message);
+			}
+     }); 
+		  function detail(clazz,method){
+		 $.ajax({ 
+            url:"http://127.0.0.1/task/zk/"+clazz+"/"+method, 
+            dataType:"json",      
+			type:"post",
+			headers: {'token':localStorage.token},
+            contentType:"application/json;charset=UTF-8",               
+			data:JSON.stringify({"operate":"DEPLOY"}), 
+			success: function(result) {
+		if(result.token!=null)
+				localStorage.token=result.token;
+			var html = template('detail', result);
+			$('#detailContent').html(html);
+			}
+         }); 
+		 }
+</script>
+<!---->
+</body>
+</html>

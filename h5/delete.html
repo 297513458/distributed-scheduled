@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>任务监控平台</title>
+<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+<!-- jQuery (necessary JavaScript plugins) -->
+<script src="js/jquery.min.js"></script>
+<!-- Custom Theme files -->
+<link href="css/dashboard.css" rel="stylesheet">
+<link href="css/style.css" rel='stylesheet' type='text/css' />
+<!--//Custom Theme files -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } 
+</script>
+<script src="js/template.js"></script>
+<script src="js/jsencrypt.js"></script>
+<script>
+var pk="MIICXQIBAAKBgQDlOJu6TyygqxfWT7eLtGDwajtNFOb9I5XRb6khyfD1Yt3YiCgQWMNW649887VGJiGr/L5i2osbl8C9+WJTeucF+S76xFxdU6jE0NQ+Z+zEdhUTooNRaY5nZiu5PgDB0ED/ZKBUSLKL7eibMxZtMlUDHjm4gwQco1KRMDSmXSMkDwIDAQABAoGAfY9LpnuWK5Bs50UVep5c93SJdUi82u7yMx4iHFMc/Z2hfenfYEzu+57fI4fvxTQ//5DbzRR/XKb8ulNv6+CHyPF31xk7YOBfkGI8qjLoq06V+FyBfDSwL8KbLyeHm7KUZnLNQbk8yGLzB3iYKkRHlmUanQGaNMIJziWOkN+N9dECQQD0ONYRNZeuM8zd8XJTSdcIX4a3gy3GGCJxOzv16XHxD03GW6UNLmfPwenKu+cdrQeaqEixrCejXdAFz/7+BSMpAkEA8EaSOeP5Xr3ZrbiKzi6TGMwHMvC7HdJxaBJbVRfApFrE0/mPwmP5rN7QwjrMY+0+AbXcm8mRQyQ1+IGEembsdwJBAN6az8Rv7QnD/YBvi52POIlRSSIMV7SwWvSK4WSMnGb1ZBbhgdg57DXaspcwHsFV7hByQ5BvMtIduHcT14ECfcECQATeaTgjFnqE/lQ22Rk0eGaYO80cc643BXVGafNfd9fcvwBMnk0iGX0XRsOozVt5AzilpsLBYuApa66NcVHJpCECQQDTjI2AQhFc1yRnCU/YgDnSpJVm1nASoRUnU8Jfm3Ozuku7JUXcVpt08DFSceCEX9unCuMcT72rAQlLpdZir876";
+    var crypt = new JSEncrypt();
+  crypt.setPrivateKey(pk);
+    crypt.setPublicKey("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCmKqA0cCBkMYAcHaNkKHWef2iCgC2poC+MjtOi3G9eFdm0bqYFHDOtj5rvsWYG2+v0AhYCGteIxBm0DJCtP1v4DSGEe41s6CHEh4TQVN1Gp0usw9VtaSccees1WhS29nLwvBMcyeourAcAoKzdP3b3002OYGFEFoBcRlMMYFhmpwIDAQAB");
+var msg=crypt.encrypt("123456");//alert(msg);
+var m="F96UrIaLi3VRMCcP0PsJa6qAvF/oAVFGDMJ++Oq9jpjIzNBYagqPvyvh5utkM65D3sJDh83pEIp6ZfGCJx07bsxBLiX4CamVMJ0QputzqS6b/07AHwfalJmwQBmikyPP3VbLiUzqkUIyQR86CZ0fr1JEpIlENiPqPiJoLnWWKU8=";
+//alert(crypt.decrypt(m));
+</script>
+</head>
+<body>
+<div class="col-md-2 sidebar">
+<script id="test" type="text/html">
+	 <h3>任务列表<li><a href="http://127.0.0.1/renwu/input.html" target="_blank">添加新任务</a></li></h3>
+    {{each data as value i}}
+       <div class="team-grids" id="{{value.id}}"> 
+		 <ul>
+		  <li> {{value.status}}<li> <li>{{i+1}}：</li><li>{{value.clazz}}</li> <li>{{value.method}}</li><li>{{value.cron}}</li>
+				<li><a href="http://127.0.0.1/renwu/detail.html?clazz={{value.clazz}}&method={{value.method}}" target="_blank">详情</a></li><li onclick="deploy('{{value.clazz}}','{{value.method}}')">{{if !value.syncStatus}} 发布任务{{/if}}</li></ul></div>
+    {{/each}}
+		<div class="clearfix"></div>
+</script>
+		 <div class="sidebar_top">
+			 <h5><a href="index.html">任务监控平台</a></h5> 			 
+		 </div>
+		<div class="top-navigation">
+				<div class="t-menu">MENU</div>
+
+				<div class="t-img">
+					<img src="images/lines.png" alt="" />
+				</div>
+				<div class="clearfix"> </div>
+		</div>
+		<div class="drop-navigation">
+			 <div class="top-menu">	 
+				 <ul>
+					 <li class="active"><a href="index.html">全部任务</a></li>
+					 <li><a href="running.html">运行中任务</a></li>
+					 <li><a href="pt.html">平台管理</a></li>
+					 <li><a href="status.html">运行状态</a></li>
+					 <li><a href="logs.html">日志</a></li>
+					 <li><a href="contact.html">用户管理</a></li>
+				 </ul>			 		 
+			 </div>
+		</div>
+</div>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">	 
+		<div class="clearfix"></div>
+		 <div class="team-work" id="content">
+	 </div>
+</div>
+<div class="clearfix"></div>
+<script>
+$.ajax({ 
+            url:"http://127.0.0.1/task/index/", 
+            dataType:"json",      
+			type:"post",
+			headers: {'token':localStorage.token},
+            contentType:"application/json",               
+            data:{}, 
+            success: function(result) {
+			if(result.token!=null)
+				localStorage.token=result.token;
+			var html = template('test', result);
+			$('#content').html(html);
+			}
+         }); 
+	 function deploy(clazz,method){
+		 $.ajax({ 
+            url:"http://127.0.0.1/task/index/"+clazz+"/"+method, 
+            dataType:"json",      
+			type:"delete",
+			headers: {'token':localStorage.token},
+            contentType:"application/json;charset=UTF-8",               
+			data:JSON.stringify({"operate":"DELETE"}), 
+			success: function(result) {
+			if(result.token!=null)
+				localStorage.token=result.token;
+			//var html = template('test', result);
+			//$('#content').html(html);
+			}
+         }); 
+		 }
+</script>
+</body>
+</html>
