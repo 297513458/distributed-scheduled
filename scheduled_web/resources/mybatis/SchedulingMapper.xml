@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.xml.SchedulingMapper">
+	<resultMap id="BaseResultMap" type="com.htxx.scheduling.pojo.Scheduling">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="clazz" jdbcType="VARCHAR" property="clazz" />
+		<result column="method" jdbcType="VARCHAR" property="method" />
+		<result column="cron" jdbcType="VARCHAR" property="cron" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="bean_id" jdbcType="VARCHAR" property="beanId" />
+		<result column="platform" jdbcType="VARCHAR" property="platform" />
+		<result column="status_operation" jdbcType="VARCHAR" property="statusOperation" />
+		<result column="check_code" jdbcType="VARCHAR" property="checkCode" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="create_user" jdbcType="VARCHAR" property="createUser" />
+		<result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+		<result column="message" jdbcType="VARCHAR" property="message" />
+		<result column="sync_status" jdbcType="BIT" property="syncStatus" />
+		<result column="sync_time" jdbcType="TIMESTAMP" property="syncTime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, clazz, method, cron, status, bean_id, platform,
+		status_operation,
+		check_code,
+		create_time, update_time, create_user,
+		update_user, message, sync_status,
+		sync_time
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from scheduling
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	<insert id="insert" parameterType="com.htxx.scheduling.pojo.Scheduling">
+		insert into scheduling (id,
+		clazz, method,
+		cron, status, bean_id,
+		platform, status_operation,
+		check_code,
+		create_time, update_time, create_user,
+		update_user, message,
+		sync_status,
+		sync_time)
+		values (#{id,jdbcType=VARCHAR},
+		#{clazz,jdbcType=VARCHAR},
+		#{method,jdbcType=VARCHAR},
+		#{cron,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+		#{beanId,jdbcType=VARCHAR},
+		#{platform,jdbcType=VARCHAR},
+		#{statusOperation,jdbcType=VARCHAR},
+		#{checkCode,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+		#{createUser,jdbcType=VARCHAR},
+		#{updateUser,jdbcType=VARCHAR},
+		#{message,jdbcType=VARCHAR},
+		#{syncStatus,jdbcType=BIT},
+		#{syncTime,jdbcType=TIMESTAMP})
+	</insert>
+	<select id="queryByClazz" resultMap="BaseResultMap"
+		parameterType="com.htxx.scheduling.pojo.Scheduling">
+		select
+		<include refid="Base_Column_List" />
+		from scheduling
+		<where>
+			<if test="clazz != null and clazz!= ''">
+				and clazz = #{clazz,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null and status!= ''">
+				and status = #{status,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="queryByScheduling" resultMap="BaseResultMap"
+		parameterType="com.htxx.scheduling.pojo.Scheduling">
+		select
+		<include refid="Base_Column_List" />
+		from scheduling
+		where clazz = #{clazz,jdbcType=VARCHAR} and method =
+		#{method,jdbcType=VARCHAR} limit 0,1
+	</select>
+	<!-- 分页查询所有信息 -->
+	<select id="page" parameterType="com.htxx.core.page.PageSearchVO"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from scheduling
+		where clazz = #{clazz,jdbcType=VARCHAR}
+		<include refid="common.page" />
+	</select>
+	<!-- 修改任务状态 -->
+	<update id="updateStatus" parameterType="com.htxx.scheduling.pojo.Scheduling">
+		update scheduling set
+		status= #{status,jdbcType=VARCHAR}
+		,sync_status = #{syncStatus,jdbcType=BIT},
+		<if test="syncStatus == true">sync_time = #{syncTime,jdbcType=TIMESTAMP}</if>
+		where clazz =
+		#{clazz,jdbcType=VARCHAR}
+		and method =
+		#{method,jdbcType=VARCHAR}
+	</update>
+	<!-- 分页查询所有信息 -->
+	<select id="pageCount" parameterType="com.htxx.core.page.PageSearchVO"
+		resultType="java.lang.Integer">
+		select count(1) from scheduling
+		where clazz =
+		#{clazz,jdbcType=VARCHAR}
+	</select>
+	<!-- 修改同步状态 -->
+	<delete id="delete" parameterType="com.htxx.scheduling.pojo.Scheduling">
+		delete from scheduling
+		where
+		clazz = #{clazz,jdbcType=VARCHAR} and method
+		=#{method,jdbcType=VARCHAR}
+	</delete>
+	<!-- 修改同步状态 -->
+	<update id="updateSync" parameterType="com.htxx.scheduling.pojo.Scheduling">
+		update scheduling set
+		sync_status = #{syncStatus,jdbcType=BIT}, sync_time =
+		#{syncTime,jdbcType=TIMESTAMP}
+		where clazz = #{clazz,jdbcType=VARCHAR}
+		and method =#{method,jdbcType=VARCHAR}
+	</update>
+</mapper>

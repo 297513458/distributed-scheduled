@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.xml.AdminMapper">
+	<resultMap id="BaseResultMap" type="com.htxx.scheduling.pojo.Admin">
+		<result column="id" jdbcType="VARCHAR" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="password" jdbcType="VARCHAR" property="password" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="check_code" jdbcType="VARCHAR" property="checkCode" />
+		<result column="platform" jdbcType="VARCHAR" property="platform" />
+		<result column="message" jdbcType="VARCHAR" property="message" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="create_user" jdbcType="VARCHAR" property="createUser" />
+		<result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+	</resultMap>
+	<resultMap id="BaseResultMapVO" extends="BaseResultMap"
+		type="com.htxx.scheduling.pojo.AdminVO">
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, name, password, status, check_code, platform, message,
+		update_time,
+		create_time,
+		create_user, update_user
+	</sql>
+	<insert id="insert" parameterType="com.htxx.scheduling.pojo.Admin">
+		insert into admin (id, name,
+		password,
+		status, check_code, platform,
+		message, update_time,
+		create_time,
+		create_user, update_user)
+		values (#{id,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER}, #{checkCode,jdbcType=VARCHAR},
+		#{platform,jdbcType=VARCHAR},
+		#{message,jdbcType=VARCHAR},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR})
+	</insert>
+	<select id="selectByNameAndPassword" parameterType="com.htxx.scheduling.pojo.AdminVO"
+		resultMap="BaseResultMapVO">
+		select id, name, password from
+		admin where name=#{name,jdbcType=VARCHAR} and
+		password=#{password,jdbcType=VARCHAR}
+	</select>
+</mapper>

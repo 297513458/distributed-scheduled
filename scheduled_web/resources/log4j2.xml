@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="debug">
+	<appenders>
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<PatternLayout pattern="%-5level %d %logger{36} - %msg%n" />
+		</Console>
+		<RollingFile name="logfile"
+			filePattern="target/$${date:yyyy-MM}/scheduling-%d{yyyy-MM-dd}-%i.log.gz"
+			fileName="target/scheduling.log">
+			<PatternLayout charset="UTF-8"
+				pattern="%-5level %d %logger{36} - %msg%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="250 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="20" />
+		</RollingFile>
+	</appenders>
+	<loggers>
+		<logger name="org.apache.struts2" level="debug" additivity="false">
+			<appender-ref ref="logfile" />
+		</logger>
+		<logger name="java.sql" level="debug" additivity="false">
+			<appender-ref ref="logfile" />
+		</logger>
+		<logger name="org.apache.ibatis" level="debug" additivity="false">
+			<appender-ref ref="logfile" />
+		</logger>
+		<root level="info">
+			<appender-ref ref="STDOUT" />
+		</root>
+	</loggers>
+</configuration>
